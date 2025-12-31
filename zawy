@@ -1,3 +1,119 @@
+-- DA MILITARY FPS BOOST SCRIPT
+-- Wklej jako LocalScript
+
+-- LocalScript w StarterPlayerScripts
+
+local StarterGui = game:GetService("StarterGui")
+
+-- Funkcja do wysyłania powiadomień
+local function sendNotification(title, text, duration)
+    StarterGui:SetCore("SendNotification", {
+        Title = title or "Notification";
+        Text = text or "";
+        Duration = duration or 3; -- czas w sekundach
+        Button1 = "okay"; -- opcjonalny przycisk
+    })
+end
+
+-- Przykład użycia:
+sendNotification("ZAWY ZAWY ZAWY", "Your FPS Boost is active", 5)
+
+
+local Lighting = game:GetService("Lighting")
+local Terrain = workspace:FindFirstChildOfClass("Terrain")
+
+-- Najniższa jakość grafiki
+settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+
+-- Wyłączenie cieni i refleksów
+Lighting.GlobalShadows = false
+Lighting.EnvironmentDiffuseScale = 0
+Lighting.EnvironmentSpecularScale = 0
+Lighting.Brightness = 1
+Lighting.FogEnd = 9e9
+Lighting.ClockTime = 14
+
+-- Usunięcie post process effectów
+for _, effect in ipairs(Lighting:GetChildren()) do
+	if effect:IsA("PostEffect") then
+		effect:Destroy()
+	end
+end
+
+-- Obniżenie jakości wody (jeśli mapa jej używa)
+if Terrain then
+	Terrain.WaterWaveSize = 0
+	Terrain.WaterWaveSpeed = 0
+	Terrain.WaterReflectance = 0
+	Terrain.WaterTransparency = 1
+end
+
+-- Usuwanie tekstur z terenu i obiektów
+for _, obj in ipairs(workspace:GetDescendants()) do
+	if obj:IsA("Decal") or obj:IsA("Texture") then
+		obj:Destroy()
+	end
+end
+
+-- FUNKCJA: uproszczenie części gry
+local function optimize(obj)
+	-- Wygaszenie cieni i detalu z części
+	if obj:IsA("BasePart") then
+		obj.Material = Enum.Material.Plastic
+		obj.CastShadow = false
+		obj.Reflectance = 0
+	end
+
+	-- Usunięcie particle efektów (wybuchy, dym, ogień)
+	if obj:IsA("ParticleEmitter") or obj:IsA("Fire") or obj:IsA("Smoke") then
+		obj.Enabled = false
+	end
+
+	-- Zmniejszenie świateł
+	if obj:IsA("PointLight") or obj:IsA("SpotLight") or obj:IsA("SurfaceLight") then
+		obj.Enabled = false
+	end
+end
+
+-- Optymalizacja wszystkich istniejących obiektów
+for _, v in ipairs(workspace:GetDescendants()) do
+	optimize(v)
+end
+
+-- Optymalizacja nowych obiektów (np. wybuchów w trakcie gry)
+workspace.DescendantAdded:Connect(function(obj)
+	optimize(obj)
+end)
+
+-- Ustawienia FPS Clienta
+local RunService = game:GetService("RunService")
+
+RunService:Set3dRenderingEnabled(true) -- musi być true, inaczej error
+
+-- Usuwanie gun flash i recoil (jeśli gra używa efektów clienta)
+-- Działa tylko jeśli efekty są client-side
+local function removeGunEffects()
+	for _, obj in ipairs(workspace:GetDescendants()) do
+		if obj.Name:lower():find("flash") or
+		   obj.Name:lower():find("smoke") or
+		   obj.Name:lower():find("muzzle") then
+			obj:Destroy()
+		end
+	end
+end
+
+removeGunEffects()
+
+workspace.DescendantAdded:Connect(function(obj)
+	if obj.Name:lower():find("flash") or
+	   obj.Name:lower():find("smoke") or
+	   obj.Name:lower():find("muzzle") then
+		obj:Destroy()
+	end
+end)
+
+print("zawyW")
+
 -- DA MILITARY ULTRA FPS BOOST SCRIPT
 -- LocalScript w StarterPlayerScripts
 
@@ -91,234 +207,3 @@ RunService:Set3dRenderingEnabled(true)
 pcall(function()
     Workspace:SetAttribute("OptimizeFPS", true)
 end)
-
-wait(2)
-
-print("---Features---")
-print("AntiGH")
-print("InfStam")
-print("ChatSpy")
-print("Reset [P]")
-print("MaxCam")
-print("--------------")
-
-
-local ScreenGui = Instance.new("ScreenGui")
-local Frame = Instance.new("Frame")
-local TextLabel = Instance.new("TextLabel")
-local TextLabel_2 = Instance.new("TextLabel")
-local TextLabel_3 = Instance.new("TextLabel")
-local TextLabel_4 = Instance.new("TextLabel")
-local TextLabel_5 = Instance.new("TextLabel")
-local TextLabel_6 = Instance.new("TextLabel")
-local TextLabel_7 = Instance.new("TextLabel")
-local TextLabel_8 = Instance.new("TextLabel")
-local TextLabel_9 = Instance.new("TextLabel")
-local x = Instance.new("TextButton")
-local TextLabel_10 = Instance.new("TextLabel")
-
---Properties:
-	
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-
-Frame.Parent = ScreenGui
-Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-Frame.BorderColor3 = Color3.fromRGB(14, 0, 111)
-Frame.BorderSizePixel = 2
-Frame.Position = UDim2.new(0.393054456, 0, 0.286413699, 0)
-Frame.Size = UDim2.new(0, 270, 0, 349)
-
-TextLabel.Parent = Frame
-TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel.BackgroundTransparency = 1.000
-TextLabel.Position = UDim2.new(0.0444444455, 0, 0.0229226351, 0)
-TextLabel.Size = UDim2.new(0, 247, 0, 67)
-TextLabel.Font = Enum.Font.SourceSans
-TextLabel.Text = "WELCOME"
-TextLabel.TextColor3 = Color3.fromRGB(255, 0, 4)
-TextLabel.TextSize = 51.000
-
-TextLabel_2.Parent = Frame
-TextLabel_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_2.BackgroundTransparency = 1.000
-TextLabel_2.Position = UDim2.new(0.0444444455, 0, 0.214899719, 0)
-TextLabel_2.Size = UDim2.new(0, 179, 0, 42)
-TextLabel_2.Font = Enum.Font.SourceSans
-TextLabel_2.Text = "Press \"F9\" to see features"
-TextLabel_2.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_2.TextSize = 20.000
-TextLabel_2.TextWrapped = true
-
-TextLabel_3.Parent = Frame
-TextLabel_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_3.BackgroundTransparency = 1.000
-TextLabel_3.Position = UDim2.new(0.459259272, 0, 0.90830946, 0)
-TextLabel_3.Size = UDim2.new(0, 178, 0, 42)
-TextLabel_3.Font = Enum.Font.SourceSans
-TextLabel_3.Text = "\"Made\" by - Tuptuś/ExtraW"
-TextLabel_3.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_3.TextSize = 11.000
-TextLabel_3.TextWrapped = true
-
-TextLabel_4.Parent = Frame
-TextLabel_4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_4.BackgroundTransparency = 1.000
-TextLabel_4.Position = UDim2.new(0.166666672, 0, 0.438395441, 0)
-TextLabel_4.Size = UDim2.new(0, 179, 0, 42)
-TextLabel_4.Font = Enum.Font.SourceSans
-TextLabel_4.Text = "New features:"
-TextLabel_4.TextColor3 = Color3.fromRGB(255, 0, 4)
-TextLabel_4.TextSize = 25.000
-TextLabel_4.TextWrapped = true
-
-TextLabel_5.Parent = Frame
-TextLabel_5.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_5.BackgroundTransparency = 1.000
-TextLabel_5.Position = UDim2.new(-0.174074069, 0, 0.561604559, 0)
-TextLabel_5.Size = UDim2.new(0, 171, 0, 33)
-TextLabel_5.Font = Enum.Font.SourceSans
-TextLabel_5.Text = "- InfStam"
-TextLabel_5.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_5.TextSize = 20.000
-TextLabel_5.TextWrapped = true
-
-TextLabel_6.Parent = Frame
-TextLabel_6.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_6.BackgroundTransparency = 1.000
-TextLabel_6.Position = UDim2.new(-0.174074069, 0, 0.60744983, 0)
-TextLabel_6.Size = UDim2.new(0, 171, 0, 33)
-TextLabel_6.Font = Enum.Font.SourceSans
-TextLabel_6.Text = "- MaxCam"
-TextLabel_6.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_6.TextSize = 20.000
-TextLabel_6.TextWrapped = true
-
-TextLabel_7.Parent = Frame
-TextLabel_7.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_7.BackgroundTransparency = 1.000
-TextLabel_7.Position = UDim2.new(-0.19629629, 0, 0.656160474, 0)
-TextLabel_7.Size = UDim2.new(0, 171, 0, 33)
-TextLabel_7.Font = Enum.Font.SourceSans
-TextLabel_7.Text = "- AntiGH"
-TextLabel_7.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_7.TextSize = 20.000
-TextLabel_7.TextWrapped = true
-
-TextLabel_8.Parent = Frame
-TextLabel_8.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_8.BackgroundTransparency = 1.000
-TextLabel_8.Position = UDim2.new(-0.148148134, 0, 0.702005744, 0)
-TextLabel_8.Size = UDim2.new(0, 171, 0, 33)
-TextLabel_8.Font = Enum.Font.SourceSans
-TextLabel_8.Text = "- P to RESET"
-TextLabel_8.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_8.TextSize = 20.000
-TextLabel_8.TextWrapped = true
-
-TextLabel_9.Parent = Frame
-TextLabel_9.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_9.BackgroundTransparency = 1.000
-TextLabel_9.Position = UDim2.new(-0.174074054, 0, 0.750716329, 0)
-TextLabel_9.Size = UDim2.new(0, 171, 0, 33)
-TextLabel_9.Font = Enum.Font.SourceSans
-TextLabel_9.Text = "- ChatSpy"
-TextLabel_9.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_9.TextSize = 20.000
-TextLabel_9.TextWrapped = true
-
-x.Name = "x"
-x.Parent = Frame
-x.BackgroundColor3 = Color3.fromRGB(255, 0, 4)
-x.BorderColor3 = Color3.fromRGB(0, 0, 0)
-x.Position = UDim2.new(0.933333337, 0, 0, 0)
-x.Size = UDim2.new(0, 18, 0, 18)
-x.Font = Enum.Font.SourceSans
-x.Text = "x"
-x.TextColor3 = Color3.fromRGB(0, 0, 0)
-x.TextSize = 17.000
-
-TextLabel_10.Parent = Frame
-TextLabel_10.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_10.BackgroundTransparency = 1.000
-TextLabel_10.Position = UDim2.new(-0.2074074, 0, 0.750716329, 0)
-TextLabel_10.Size = UDim2.new(0, 247, 0, 67)
-TextLabel_10.Font = Enum.Font.SourceSans
-TextLabel_10.Text = "More features later"
-TextLabel_10.TextColor3 = Color3.fromRGB(255, 0, 4)
-TextLabel_10.TextSize = 17.000
-
--- Scripts:
-
-local function PFRHF_fake_script() -- x.LocalScript 
-	local script = Instance.new('LocalScript', x)
-
-	local Frame = script.Parent.Parent
-	
-	script.Parent.MouseButton1Click:Connect(function()
-		Frame.Visible = false
-	end)
-end
-coroutine.wrap(PFRHF_fake_script)()
-
-function onKeyPress(actionName, userInputState, inputObject)
-   if userInputState == Enum.UserInputState.Begin then
-       game.Players.LocalPlayer.Character["Right Arm"]:Remove()
-       game.Players.LocalPlayer.Character["Left Arm"]:Remove()
-       game.Players.LocalPlayer.Character["Right Leg"]:Remove()
-       game.Players.LocalPlayer.Character["Left Leg"]:Remove()
-       game.Players.LocalPlayer.Character["Torso"]:Remove()
-       game.Players.LocalPlayer.Character["Head"]:Remove()
-end
-end
-
-game.ContextActionService:BindAction("keyPress", onKeyPress, false, Enum.KeyCode.P)
-
-local LocalP = game.Players.LocalPlayer
-
-LocalP.Character.Stamina.Changed:Connect(function()
-    LocalP.Character:WaitForChild"Stamina"
-    LocalP.Character.Stamina.Value = 100 
-end)
-LocalP.CharacterAdded:Connect(function()
-    LocalP.Character:WaitForChild"Stamina"
-    LocalP.Character.Stamina.Changed:Connect(function()
-        LocalP.Character.Stamina.Value = 100 
-    end)
-end)
-
-game.Players.LocalPlayer.CameraMaxZoomDistance = math.huge
-
-repeat wait() until game:IsLoaded() and game:WaitForChild"Players";
-
-local Players, Uis, SGui = game:GetService"Players", game:GetService"UserInputService", game:GetService"StarterGui";
-local Client, AntiGH = Players.LocalPlayer, true;
-
-function StateChangedEvent(T, Changed)
-   if AntiGH == true then
-       if Client and Client.Character and Client.Character:FindFirstChildOfClass"Humanoid" then
-           if Changed == Enum.HumanoidStateType.FallingDown or Changed == Enum.HumanoidStateType.PlatformStanding then
-               Client.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Running);Client.Character.Humanoid.PlatformStand = false -- Credits to Aidez for this part
-           end
-       end
-   end
-end
-Client.Character:WaitForChild"Humanoid".StateChanged:Connect(StateChangedEvent)
-
-function CharacterAddedEvent()
-   Client.Character:WaitForChild"Humanoid";
-   Client.Character.Humanoid.StateChanged:Connect(StateChangedEvent)
-end
-Client.CharacterAdded:Connect(CharacterAddedEvent)
-
-Uis.InputBegan:Connect(function(Key)
-   if not Uis:GetFocusedTextBox() then
-       if Key.KeyCode == Enum.KeyCode.RightAlt then
-           AntiGH = not AntiGH
-           Notify("xaxa", "Anti Ground-Hit: "..tostring(AntiGH), nil, 3)
-       end
-   end
-end)
-
-local ChatFrame = game:GetService("Players").LocalPlayer.PlayerGui.Chat.Frame 
-ChatFrame.ChatChannelParentFrame.Visible = true 
-ChatFrame.ChatBarParentFrame.Position = ChatFrame.ChatChannelParentFrame.Position + UDim2.new(UDim.new(), ChatFrame.ChatChannelParentFrame.Size.Y)
